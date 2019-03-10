@@ -1,8 +1,15 @@
 import React from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import PropTypes from 'prop-types';
 import { formatPrice } from '../helpers';
 
 class Order extends React.Component {
+  static propTypes = {
+    fishes: PropTypes.object.isRequired,
+    order: PropTypes.object.isRequired,
+    removeFromOrder: PropTypes.func.isRequired,
+  };
+
   renderOrder = key => {
     const fish = this.props.fishes[key];
     const count = this.props.order[key];
@@ -39,7 +46,10 @@ class Order extends React.Component {
             </TransitionGroup>
             lbs {fish.name}
             {formatPrice(count * fish.price)}
-            <button onClick={() => this.props.removeFromOrder(key)}>
+            <button
+              type="button"
+              onClick={() => this.props.removeFromOrder(key)}
+            >
               &times;
             </button>
           </span>
@@ -50,14 +60,14 @@ class Order extends React.Component {
 
   render() {
     const orderIds = Object.keys(this.props.order);
-    const total = orderIds.reduce((total, key) => {
+    const total = orderIds.reduce((prevTotal, key) => {
       const fish = this.props.fishes[key];
       const count = this.props.order[key];
       const isAvailable = fish && fish.status === 'available';
       if (isAvailable) {
-        return total + count * fish.price;
+        return prevTotal + count * fish.price;
       }
-      return total;
+      return prevTotal;
     }, 0);
     return (
       <div className="order-wrap">

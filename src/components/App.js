@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
@@ -7,6 +8,10 @@ import base from '../base';
 import sampleFishes from '../sample-fishes';
 
 class App extends React.Component {
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+  };
+
   state = {
     fishes: {},
     order: {},
